@@ -1,0 +1,15 @@
+[Meta-information]
+project:Modeling the solar core
+course:AST3310
+language:C++
+compileFlags:[]
+linkFlags:[O3]
+compiler:c++
+libLocations:[]
+sourceDir:src/
+headerSearchDirs:[]
+exe:SolarCore.x
+buildDir:build/
+objectsDir:.objects/
+libs:[]
+files:[]
