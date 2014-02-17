@@ -8,8 +8,8 @@ compiler:c++
 libLocations:[]
 sourceDir:src/
 headerSearchDirs:[]
-exe:SolarCore.x
+exe:ModelingSolarCore.x
 buildDir:build/
 objectsDir:.objects/
 libs:[]
-files:[]
+files:[constants.cpp, helper_functions.cpp, rhs.cpp, main.cpp]
