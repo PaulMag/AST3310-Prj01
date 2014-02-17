@@ -6,7 +6,7 @@ double rhs_R(double rho);
 /*
  * @return dP / dm
  */
-double rhs_P(double m);
+double rhs_P(double m, double R);
 
 /*
  * @return dL / dm
