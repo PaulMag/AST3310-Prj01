@@ -1,26 +1,29 @@
+#include <cmath>
+
 #include "rhs.hpp";
 #include "helper_functions.hpp";
+
 #include "constants.cpp";
 
-/*
- * @return dR / dm
- */
-double rhs_R(double rho) {
-  return 1.0 / ( 4.0 * PI * r*r * rho );
-}
+  /*
+  * @return dR / dm
+  */
+  double rhs_R(double rho, double R) {
+    return 1.0 / ( 4.0 * PI * R*R * rho );
+  }
 
-/*
- * @return dP / dm
- */
-double rhs_P(double m, double R) {
-  return - ( G * m ) / ( 4.0 * PI * pow(R,4) );
-}
+  /*
+  * @return dP / dm
+  */
+  double rhs_P(double m, double R) {
+    return - ( G * m ) / ( 4.0 * PI * pow(R,4) );
+  }
 
-/*
- * @return dL / dm
- */
-double rhs_L(double T, double rho) {
-  return epsilon(T,rho);
+  /*
+  * @return dL / dm
+  */
+  double rhs_L(double T, double rho) {
+    return epsilon(T,rho);
 }
 
 /*

@@ -1,7 +1,7 @@
 /*
  * @return dR / dm
  */
-double rhs_R(double rho);
+double rhs_R(double rho, double R);
 
 /*
  * @return dP / dm
