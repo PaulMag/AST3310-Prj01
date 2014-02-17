@@ -1,4 +1,6 @@
-AST3310-Prj01
+Modeling the solar core
 =============
 
-Modeling the solar core.
+Student project for the course astrophysical plasma and stellar interios. Simple model of a star.
+
+Read about the project in the [wiki](https://github.com/jaremikb/AST3310-Prj01/wiki).
