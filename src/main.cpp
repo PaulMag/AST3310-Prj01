@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "rhs.hpp"
+#include "EquationOfState.hpp"
 
 using namespace std;
 
