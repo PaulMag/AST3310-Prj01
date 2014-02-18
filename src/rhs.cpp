@@ -1,9 +1,9 @@
 #include <cmath>
 
-#include "rhs.hpp";
-#include "helper_functions.hpp";
+#include "rhs.hpp"
+#include "helper_functions.hpp"
 
-#include "constants.cpp";
+#include "constants.cpp"
 
   /*
   * @return dR / dm

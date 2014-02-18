@@ -1,4 +1,4 @@
-#include "helper_functions.hpp";
+#include "helper_functions.hpp"
 
 /*
  * @return Reaction rates.
