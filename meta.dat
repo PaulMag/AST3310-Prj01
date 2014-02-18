@@ -12,4 +12,4 @@ exe:ModelingSolarCore.x
 buildDir:build/
 objectsDir:.objects/
 libs:[]
-files:[constants.cpp, helper_functions.cpp, rhs.cpp, main.cpp]
+files:[constants.cpp, helper_functions.cpp, rhs.cpp, main.cpp, EquationOfState.cpp]
