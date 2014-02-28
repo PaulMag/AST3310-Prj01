@@ -54,7 +54,7 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
     log10T = log(T)
 
     # log10(R)
-    R = float(rho) / ( T / 1e6 )
+    R = float(rho) / ( T / 1.e6 )
     log10R = log(R)
 
     # Begin process of traversing file to find correct log10kappa
@@ -73,7 +73,7 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
 
     closest = headerline[0]
     for R in headerline[1:]:
-        if abs(log10R-R) > abs(log10R-closest):
+        if abs(log10R-R) < abs(log10R-closest):
             closest = R
 
     # Which column does this R correspond to?
