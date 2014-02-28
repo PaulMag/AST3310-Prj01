@@ -62,7 +62,7 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
 
     """
     First, traverse header line to find correct column by finding the
-    log10(T) which is closest.
+    log10(R) which is closest.
 
     Exclude the first input ( [1:] ) since that is text.
     """
@@ -72,14 +72,14 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
     opacities.close()
 
     closest = headerline[0]
-    for T in headerline[1:]:
-        if abs(log10T-T) > abs(log10T-closest):
-            closest = T
+    for R in headerline[1:]:
+        if abs(log10R-R) > abs(log10R-closest):
+            closest = R
 
-    # Which column does this T correspond to?
+    # Which column does this R correspond to?
     columnNo = 0
-    for T in headerline:
-        if T == closest:
+    for R in headerline:
+        if R == closest:
             break
         columnNo += 1
 
@@ -97,7 +97,7 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
         if closest == False:
             closest = row[0]
 
-        if abs(log10R-row[0]) < abs(log10R-closest):
+        if abs(log10T-row[0]) < abs(log10T-closest):
             closest = row[0]
 
     opacities.close()
@@ -137,6 +137,7 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
                     log10kappa = k
                     break
                 current_column += 1
+            break
         current_row += 1
 
     opacities.close()
@@ -148,4 +149,4 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
 if __name__ == '__main__':
     T = 10**(3.75)
     rho = 5.623413252e-8
-    print kappa(T, rho)
+    kappa(T, rho)
