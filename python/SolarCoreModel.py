@@ -9,7 +9,7 @@ differential equations.
 """
 import numpy as np
 
-from numpy import pi, log10
+from numpy import pi, log10, exp
 
 """CONSTANTS"""
 
@@ -69,7 +69,7 @@ class Compound(object):
         @param rho The current mass density of the solar core.
         @param T The current temperature.
         @param other_compound The other compound to react with.
-        ®return Rate per unit mass.
+        @return Rate per unit mass.
         """
         #TODO is it correct that equal compounds is 1?
         if self.name == other_compound.name:
@@ -244,6 +244,32 @@ def create_compounds():
     compounds['Be7'] = Compound( 'Be7', _HE3_MASS, _Z0_7LI )
 
     return compounds
+
+def lambda_function(i, j, T):
+    """
+    @param i,j The two reacting compounds.
+    @param T Temperature in core.
+    @return Appropriate lambda based on reaction taking place.
+    """
+    T9 = T / 1.e9
+
+    # PP I, II, III
+    if i.name == 'H' and j.name == 'H':
+        l = 4.01e-15 * T9**(-2./3) * exp( -3.380 * T9**(-1./3) ) \
+                * (1 + 0.123 * T9**(1./3) + 1.09 * T9**(2./3) + \
+                0.938 * T9 )
+
+    # PP I
+    elif i.name == 'He3' and j.name == 'He3':
+        l = 6.04e10 * T9**(-2./3) * exp(-12.276 * T9**(-1./3)) \
+                * (1 + 0.034 * T9**(1./3) - 0.522 * T9**(2./3) \
+                - 0.124 * T9 + 0.353 * T9**(4./3) \
+                + 0.213 * T9**(-5./3) )
+
+    # PP II, III
+    elif (i.name == 'He3' and j.name == 'He4') or \
+         (i.name == 'He4' and j.name == 'He3'):
+        l = 5.61e6 *
 
 """MAIN INTEGRATION PROCESS"""
 
