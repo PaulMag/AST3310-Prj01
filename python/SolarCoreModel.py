@@ -276,7 +276,7 @@ def lambda_function(i, j, T):
 
         l = 5.61e6 * T_star**(5./6) * T9**(-3./2) \
                 * exp(-12.826 * T_star**(-1./3))
-                *
+
     # PP II
     elif (i.name == 'Be7' and j.name == 'e-') or \
          (i.name == 'e-' and j.name == 'Be7'):
