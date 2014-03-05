@@ -30,6 +30,7 @@ _HE3_MASS = 5.0081e-27 # [kg]
 _HE4_MASS = 6.6464e-27 # [kg]
 _LI7_MASS = 7.01600455 # [kg]
 _BE7_MASS = 7.01692983 # [kg]
+_E_MASS = 9.10938291 # [kg]
 
 """NUCLEAR ENERGY VALUES"""
 
@@ -267,6 +268,13 @@ def create_compounds():
     compounds['He4'] = Compound( 'He4', _HE3_MASS, _Y0 - _Y3_0 )
     compounds['Li7'] = Compound( 'Li7', _HE3_MASS, _Z0_7BE )
     compounds['Be7'] = Compound( 'Be7', _HE3_MASS, _Z0_7LI )
+    compounds['e-'] = Compound( 'e-', _E_MASS, 0)
+
+    # Special case, e relative density
+    compounds['e-'].relative_density = np.sum(
+            [c.relative_density for c in \
+            [compounds[s] for s in \
+            ['He3', 'He4', 'H'] ] ] )
 
     return compounds
 
