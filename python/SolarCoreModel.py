@@ -57,9 +57,6 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
     R = float(rho) / ( T / 1.e6 )
     log10R = log10(R)
 
-    print 'log10T =', log10T
-    print 'log10R =', log10R
-
     # Begin process of traversing file to find correct log10kappa
     opacities = open(opacityFile, 'r')
 
