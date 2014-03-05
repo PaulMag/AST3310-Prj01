@@ -15,6 +15,12 @@ from numpy import pi, log10
 
 _OPACITY_FILE = "../data/opacity.txt" # File with opacities
 
+_L_SUN = 3.846e26 # [W]
+_R_SUN = 6.96e8 # [m]
+_M_SUN = 1.989e30 # [kg]
+_SIGMA = 5.67e-8 # [W m^-2 K^-4]
+_K_B = 1.382e-23 # [m^2 kg s^-2 K^-1]
+
 """INITIAL PARAMETERS"""
 
 _L0 = _L_SUN
