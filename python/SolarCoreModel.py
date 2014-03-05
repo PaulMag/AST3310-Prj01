@@ -15,12 +15,21 @@ from numpy import pi, log10, exp
 
 _OPACITY_FILE = "../data/opacity.txt" # File with opacities
 
+"""PHYSICAL CONSTANTS"""
+
 _L_SUN = 3.846e26 # [W]
 _R_SUN = 6.96e8 # [m]
 _M_SUN = 1.989e30 # [kg]
+
 _SIGMA = 5.67e-8 # [W m^-2 K^-4]
 _K_B = 1.382e-23 # [m^2 kg s^-2 K^-1]
-# TODO add constants for particle masses
+_N_A = 6.0221413e23 # Avogadro's constant
+
+_H_MASS = 1.6738e-27 # [kg]
+_HE3_MASS = 5.0081e-27 # [kg]
+_HE4_MASS = 6.6464e-27 # [kg]
+_LI7_MASS = 7.01600455 # [kg]
+_BE7_MASS = 7.01692983 # [kg]
 
 """INITIAL PARAMETERS"""
 
@@ -37,12 +46,6 @@ _Y0 = 0.29
 _Z0 = 0.01
 _Z0_7LI = 1.e-5
 _Z0_7BE = 1.e-5
-
-_H_MASS = 1.6738e-27 # [kg]
-_HE3_MASS = 5.0081e-27 # [kg]
-_HE4_MASS = 6.6464e-27 # [kg]
-_LI7_MASS = 7.01600455 # [kg]
-_BE7_MASS = 7.01692983 # [kg]
 
 """CLASSES"""
 
@@ -269,7 +272,25 @@ def lambda_function(i, j, T):
     # PP II, III
     elif (i.name == 'He3' and j.name == 'He4') or \
          (i.name == 'He4' and j.name == 'He3'):
-        l = 5.61e6 *
+        T_star = T9 / (1. + 4.95e-2 * T9)
+
+        l = 5.61e6 * T_star**(5./6) * T9**(-3./2) \
+                * exp(-12.826 * T_star**(-1./3))
+                *
+    # PP II
+    elif (i.name == 'Be7' and j.name == 'e-') or \
+         (i.name == 'e-' and j.name == 'Be7'):
+        l = 1.34e10 * T9**(-1./2) * (1 - 0.537 * T9**(1./3) \
+                + 3.86 * T9**(2./3) + 0.0027 * T9**(-1.) \
+                * exp(2.515e-3 * T9**(-1.) ) )
+    
+    # PP III
+    elif (i.name == 'Be7' and j.name == 'H') or \
+         (i.name == 'H' and j.name == 'Be7'):
+        l = 3.11e5 * T9**(-2./3) * exp(-10.262 * T9**(-1./3)) \
+                + 2.53e3 * T9**(-3./2) * exp(-7.306 * T9**(-1.))
+
+    return N_A * l
 
 """MAIN INTEGRATION PROCESS"""
 
