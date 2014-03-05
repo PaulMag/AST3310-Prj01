@@ -252,10 +252,19 @@ def opacity_test(tol=1.e-10):
     else:
         print 'Fail.\n10**kappa =', ans, 'and not -0.068.'
 
-def epsilon():
+def epsilon(compounds):
     """
+    @param compunds List of compounds.
     @return Energy produced times reaction rate.
     """
+    eps = 0
+
+    # PP I
+    eps += _Q_H_H * compounds['H'].r(compounds['H'])
+    eps += 1.59 # [MeV]
+
+    # PP II
+    eps += _Q_H_H * compounds['H'].r(compounds['H'])
 
 def create_compounds():
     """
