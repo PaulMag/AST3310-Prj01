@@ -9,7 +9,7 @@ differential equations.
 """
 import numpy as np
 
-from numpy import pi, log
+from numpy import pi, log10
 
 """CONSTANTS"""
 
@@ -51,11 +51,14 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
     @return kappa in unit [cm^2 g^-1]
     """
     # log10(T)
-    log10T = log(T)
+    log10T = log10(T)
 
     # log10(R)
     R = float(rho) / ( T / 1.e6 )
-    log10R = log(R)
+    log10R = log10(R)
+
+    print 'log10T =', log10T
+    print 'log10R =', log10R
 
     # Begin process of traversing file to find correct log10kappa
     opacities = open(opacityFile, 'r')
@@ -143,10 +146,21 @@ def kappa(T, rho, opacityFile=OPACITY_FILE):
     opacities.close()
 
     # Returned from file is log10kappa
-    print log10kappa
     return 10**log10kappa
 
+def opacity_test(tol=1.e-10):
+    """
+    Function for testing that the opacity is fetched correctly.
+    """
+    # Test values
+    T = 10**(5.) # Feth 5.00 row
+    rho = 1.e-6 # Fetch -5.0 column
+
+    ans = log10(kappa(T, rho))
+    if abs(ans - (-0.068)) < tol:
+        print 'Sucess.'
+    else:
+        print 'Fail.\n10**kappa =', ans, 'and not -0.068.'
+
 if __name__ == '__main__':
-    T = 10**(3.75)
-    rho = 5.623413252e-8
-    kappa(T, rho)
+    opacity_test()
