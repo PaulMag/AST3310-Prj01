@@ -15,6 +15,22 @@ from numpy import pi, log10
 
 OPACITY_FILE = "../data/opacity.txt" # File with opacities
 
+"""INITIAL PARAMETERS"""
+
+_L0 = _L_SUN
+_R0 = 0.5*_R_SUN
+_M0 = 0.7*_M_SUN
+_RHO0 = 1.e3 # [kg m^-1]
+_T0 = 1.e5 # [K]
+_P0 = 1.e11 # [Pa]
+
+_X0 = 0.7
+_Y3_0 = 1.e-10
+_Y0 = 0.29
+_Z0 = 0.01
+_Z0_7LI = 1.e-5
+_Z0_7BE = 1.e-5
+
 """CLASSES"""
 
 class Compound(object):
