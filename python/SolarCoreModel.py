@@ -15,6 +15,22 @@ from numpy import pi, log10
 
 OPACITY_FILE = "../data/opacity.txt" # File with opacities
 
+"""CLASSES"""
+
+class Compound(object):
+    """
+    Describes a compound. Used in conjunction with calculating energy
+    production rates so that the kronecker delta can be decided generally.
+
+    Keeps ratios and mass of one particle in order.
+    """
+    def __init__(self, mass, ratio):
+        """
+        @param mass Mass of one particle.
+        @param ratio How much of the total mass is this compound.
+        """
+        self.m,self.r = mass, ratio
+
 """RHS FUNCTIONS"""
 
 def rhs_r(r, rho):
