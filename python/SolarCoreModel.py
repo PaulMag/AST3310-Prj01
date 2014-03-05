@@ -64,9 +64,10 @@ class Compound(object):
         self.name,self.m,self.r = name, mass, ratio
         self.relative_density = self.m / self.r
 
-    def r(self, rho, other_compound):
+    def r(self, rho, T, other_compound):
         """
         @param rho The current mass density of the solar core.
+        @param T The current temperature.
         @param other_compound The other compound to react with.
         ®return Rate per unit mass.
         """
@@ -77,7 +78,8 @@ class Compound(object):
             kronecker_delta = 0
 
         return ( self.r(rho) * other_compound.r(rho) ) \
-                        / ( rho * (1 + kronecker_delta) ) * self.lam
+                        / ( rho * (1 + kronecker_delta) ) * \
+                        lambda_function(self, other_compound, T)
 
     def n(self, rho):
         """
