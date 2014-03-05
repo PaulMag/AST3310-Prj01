@@ -20,6 +20,7 @@ _R_SUN = 6.96e8 # [m]
 _M_SUN = 1.989e30 # [kg]
 _SIGMA = 5.67e-8 # [W m^-2 K^-4]
 _K_B = 1.382e-23 # [m^2 kg s^-2 K^-1]
+# TODO add constants for particle masses
 
 """INITIAL PARAMETERS"""
 
@@ -196,6 +197,15 @@ def opacity_test(tol=1.e-10):
         print 'Sucess.'
     else:
         print 'Fail.\n10**kappa =', ans, 'and not -0.068.'
+
+"""MAIN INTEGRATION PROCESS"""
+
+def integrate(dm):
+    """
+    Performs integration.
+    """
+    #TODO Write function (skeleton)
+    pass
 
 if __name__ == '__main__':
     opacity_test()
