@@ -31,6 +31,23 @@ _HE4_MASS = 6.6464e-27 # [kg]
 _LI7_MASS = 7.01600455 # [kg]
 _BE7_MASS = 7.01692983 # [kg]
 
+"""NUCLEAR ENERGY VALUES"""
+
+# PP I
+_Q_H_H = 1.177 # [MeV]
+_Q_D_HE = 5.494 # [MeV]
+_Q_HE3_HE3 = 12.860 # [MeV]
+
+# PP II
+_Q_HE3_ALPHA = 1.586 # [MeV]
+_Q_BE7_E = 0.049 # [MeV]
+_Q_LI7_H = 17.346 # [MeV]
+
+# PP III
+_Q_BE7_H = 0.137 # [MeV]
+_Q_B8_BE8 = 8.367 # [MeV]
+_Q_BE8 = 2.995 # [MeV]
+
 """INITIAL PARAMETERS"""
 
 _L0 = _L_SUN
@@ -233,6 +250,11 @@ def opacity_test(tol=1.e-10):
         print 'Sucess.'
     else:
         print 'Fail.\n10**kappa =', ans, 'and not -0.068.'
+
+def epsilon():
+    """
+    @return Energy produced times reaction rate.
+    """
 
 def create_compounds():
     """
