@@ -13,7 +13,7 @@ from numpy import pi, log10
 
 """CONSTANTS"""
 
-OPACITY_FILE = "../data/opacity.txt" # File with opacities
+_OPACITY_FILE = "../data/opacity.txt" # File with opacities
 
 """INITIAL PARAMETERS"""
 
@@ -75,7 +75,7 @@ def rhs_T():
 
 """OTHER FUNCTIONS"""
 
-def kappa(T, rho, opacityFile=OPACITY_FILE):
+def kappa(T, rho, opacityFile=_OPACITY_FILE):
     """
     Function reads from opacity file (defined as constant by default). And uses
     temperature T and density rho to find the kappa which is closest.
