@@ -38,6 +38,12 @@ _Z0 = 0.01
 _Z0_7LI = 1.e-5
 _Z0_7BE = 1.e-5
 
+_H_MASS = 1.6738e-27 # [kg]
+_HE3_MASS = 5.0081e-27 # [kg]
+_HE4_MASS = 6.6464e-27 # [kg]
+_LI7_MASS = 7.01600455 # [kg]
+_BE7_MASS = 7.01692983 # [kg]
+
 """CLASSES"""
 
 class Compound(object):
@@ -46,13 +52,38 @@ class Compound(object):
     production rates so that the kronecker delta can be decided generally.
 
     Keeps ratios and mass of one particle in order.
+
+    @field rho Particle density.
     """
-    def __init__(self, mass, ratio):
+    def __init__(self, name, mass, ratio):
         """
+        @param name Identifier.
         @param mass Mass of one particle.
         @param ratio How much of the total mass is this compound.
         """
-        self.m,self.r = mass, ratio
+        self.name,self.m,self.r = name, mass, ratio
+        self.relative_density = self.m / self.r
+
+    def r(self, rho, other_compound):
+        """
+        @param rho The current mass density of the solar core.
+        @param other_compound The other compound to react with.
+        ®return Rate per unit mass.
+        """
+        #TODO is it correct that equal compounds is 1?
+        if self.name == other_compound.name:
+            kronecker_delta = 1
+        else:
+            kronecker_delta = 0
+
+        return ( self.r(rho) * other_compound.r(rho) ) \
+                        / ( rho * (1 + kronecker_delta) ) * self.lam
+
+    def n(self, rho):
+        """
+        @return Number density of this compound.
+        """
+        return rho*self.relative_density
 
 """RHS FUNCTIONS"""
 
@@ -197,6 +228,20 @@ def opacity_test(tol=1.e-10):
         print 'Sucess.'
     else:
         print 'Fail.\n10**kappa =', ans, 'and not -0.068.'
+
+def create_compounds():
+    """
+    @return List of compounds from starting parameters.
+    """
+    compounds = {}
+
+    compounds['H'] = Compound( 'H', _H_MASS, _X0 )
+    compounds['He3'] = Compound( 'He3', _HE3_MASS, _Y3_0 )
+    compounds['He4'] = Compound( 'He4', _HE3_MASS, _Y0 - _Y3_0 )
+    compounds['Li7'] = Compound( 'Li7', _HE3_MASS, _Z0_7BE )
+    compounds['Be7'] = Compound( 'Be7', _HE3_MASS, _Z0_7LI )
+
+    return compounds
 
 """MAIN INTEGRATION PROCESS"""
 
