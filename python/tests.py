@@ -17,6 +17,7 @@ def opacity_test(tol=1.e-10):
     # Test values
     T = 10**(5.) # Feth 5.00 row
     rho = 1.e-6 # Fetch -5.0 column
+    rho /= 1.e3; rho *= 1./1e6 # Convert to SI units [kg m^-3]
 
     ans = log10(SolarCoreModel.kappa(T, rho))
     if abs(ans - (-0.068)) < tol:
