@@ -46,7 +46,7 @@ _Q_LI7_H = 17.346 # [MeV]
 
 # PP III
 _Q_BE7_H = 0.137 # [MeV]
-_Q_B8_BE8 = 8.367 # [MeV]
+_Q_B8 = 8.367 # [MeV]
 _Q_BE8 = 2.995 # [MeV]
 
 """INITIAL PARAMETERS"""
@@ -255,16 +255,29 @@ def opacity_test(tol=1.e-10):
 def epsilon(compounds):
     """
     @param compunds List of compounds.
-    @return Energy produced times reaction rate.
+    @return Energy produced times reaction rate. Also, the dictionairy
+    containing energy levels for each particular chain. Probably convenient for
+    testing for incredible values.
     """
-    eps = 0
+    energy_chains = {}
+
+    # PP I, II, III
+    energy_chains['all'] = _Q_H_H * compounds['H'].r(compounds['H'])
 
     # PP I
-    eps += _Q_H_H * compounds['H'].r(compounds['H'])
-    eps += 1.59 # [MeV]
+    energy_chains['PPI'] = _Q_HE3_HE3 * compounds['He3'].r(compounds['He3'])
 
     # PP II
-    eps += _Q_H_H * compounds['H'].r(compounds['H'])
+    energy_chains['PPII'] = _Q_HE3_ALPHA * compounds['He3'].r(compounds['He4'])
+    energy_chains['PPII'] += _Q_BE7_E * compounds['Be7'].r(compounds['e-'])
+    energy_chains['PPII'] += _Q_LI7_H * compounds['Li7'].r(compounds['H'])
+
+    # PP III
+    energy_chains['PPIII'] = (_Q_BE7_H+_Q_BE8_Q_B8) \
+                    * compounds['Be7'].r(compounds['H'])
+
+    eps = np.sum([energy_chains[key] for key in ['PPI','PPII','PPIII']])
+    return eps, energy_chains
 
 def create_compounds():
     """
