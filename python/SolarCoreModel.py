@@ -7,8 +7,6 @@ differential equations.
 
 @author Kristoffer Braekken
 """
-import numpy as np
-
 from numpy import pi, log10, exp
 
 """CONSTANTS"""
@@ -340,4 +338,4 @@ def integrate(dm):
     pass
 
 if __name__ == '__main__':
-    opacity_test()
+    pass
