@@ -387,8 +387,8 @@ def integrate_FE(dm, tol=1e-10):
 if __name__ == '__main__':
     import sys
     dm = float(sys.argv[1])
-    if abs(dm) >= 1e23:
-        print 'Too tiny dm, try higher than 1e-23.'
+    if abs(dm) <= 1e23:
+        print 'Too tiny dm, try higher than -1e23.'
         sys.exit(1)
 
     integrate_FE(dm)
