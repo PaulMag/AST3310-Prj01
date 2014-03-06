@@ -7,7 +7,7 @@ differential equations.
 
 @author Kristoffer Braekken
 """
-#TODO convert to cgs
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -404,6 +404,11 @@ def integrate_FE(dm, tol=1e-10):
     initials['L0'] = _L0
 
     for i in range(1,N):
+        # Print progress
+        percent = (i / float(N-1)) * 100
+        sys.stdout.write('Progress: %4.2f %s\r' % (percent, '%'))
+        sys.stdout.flush()
+
         rho[i] = ideal(P[i-1], T[i-1])
 
         L[i] = L[i-1] + dm*rhs_L(rho[i], T[i-1], compounds)[0]
@@ -418,7 +423,6 @@ def integrate_FE(dm, tol=1e-10):
     return r, m, P, L, T, rho, initials
 
 if __name__ == '__main__':
-    import sys
     dm = float(sys.argv[1])
     if abs(dm) <= 1e23:
         print 'Too tiny dm, try higher than -1e23.'
