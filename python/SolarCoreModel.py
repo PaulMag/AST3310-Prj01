@@ -8,6 +8,7 @@ differential equations.
 @author Kristoffer Braekken
 """
 import numpy as np
+import matplotlib.pyplot as plt
 
 from numpy import pi, log10, exp, zeros
 
@@ -352,10 +353,9 @@ def integrate_FE(dm, tol=1e-10):
 
     compounds = create_compounds()
 
-    m = _M0
     rho = _RHO0
     N = int(abs(m / float(dm)))
-    print N
+    m = range(N)*dm
 
     # Variable parameters
     r = zeros(N)
@@ -373,16 +373,14 @@ def integrate_FE(dm, tol=1e-10):
     for i in range(1,N):
         L[i] = L[i-1] + dm*rhs_L(rho, T[i-1], compounds)[0]
         r[i] = r[i-1] + dm*rhs_r(r[i-1], rho)
-        P[i] = P[i-1] + dm*rhs_P(r[i-1], m)
+        P[i] = P[i-1] + dm*rhs_P(r[i-1], m[i-1])
         T[i] = T[i-1] + dm*rhs_T(T[i-1], rho, L[i-1], r[i-1])
 
-        m -= dm
-
-        if (abs(m) < tol) or (abs(r[i]) < tol) or (abs(L[i]) < tol):
+        if (abs(m[i-1]) < tol) or (abs(r[i]) < tol) or (abs(L[i]) < tol):
             print 'Integration complete before loop finished. Returning.'
             return r[:i+1], P[:i+1], L[:i+1], T[:i+1]
 
-    return r, P, L, T
+    return r, m, P, L, T
 
 if __name__ == '__main__':
     import sys
@@ -391,4 +389,13 @@ if __name__ == '__main__':
         print 'Too tiny dm, try higher than -1e23.'
         sys.exit(1)
 
-    integrate_FE(dm)
+    r, m, P,L, T = integrate_FE(dm)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(m, L)
+    ax.set_xlabel('$m$')
+    ax.set_ylabel('$L$')
+    ax.grid('on')
+
+    plt.show()
