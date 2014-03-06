@@ -28,6 +28,7 @@ _C = 3.e8
 _SIGMA = 5.67e-8 # [W m^-2 K^-4]
 _K_B = 1.382e-23 # [m^2 kg s^-2 K^-1]
 _N_A = 6.0221413e23 # Avogadro's constant
+_MU0 = 1. / (X + Y / 4. + Z / 2.)
 
 _H_MASS = 1.6738e-27 # [kg]
 _HE3_MASS = 5.0081e-27 # [kg]
@@ -269,13 +270,15 @@ def epsilon(rho, T, compounds):
     eps = sum([energy_chains[key] for key in ['PPI','PPII','PPIII']])
     return eps, energy_chains
 
-def ideal(P, T, compound):
+def ideal(P, T):
     """
     Ideal equation of state.
     """
     P_rad = (4. * _SIGMA / 3. ) * (T**4) / _C
     P_g = P - P_rad
-    return P_g * compound.m / (_K_B * T)
+    E = _MU0*(_X0 + (1 + 2)_Y0/4.)
+    mu = _MU0 / (1 + E)
+    return P_g * mu / (_K_B * T)
 
 def create_compounds():
     """
@@ -383,6 +386,8 @@ def integrate_FE(dm, tol=1e-10):
     T[0] = _T0
 
     for i in range(1,N):
+        rho = ideal(P[i-1], T[i-1])
+
         L[i] = L[i-1] + dm*rhs_L(rho, T[i-1], compounds)[0]
         r[i] = r[i-1] + dm*rhs_r(r[i-1], rho)
         P[i] = P[i-1] + dm*rhs_P(r[i-1], m[i-1])
