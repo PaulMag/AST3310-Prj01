@@ -406,7 +406,7 @@ def integrate_FE(dm, tol=1e-10):
             print 'Integration complete before loop finished. Returning.'
             return r[:i+1], m[:i+1], P[:i+1], L[:i+1], T[:i+1]
 
-    return r, m, P, L, T, initials
+    return r, m, P, L, T, rho, initials
 
 if __name__ == '__main__':
     import sys
