@@ -7,7 +7,7 @@ differential equations.
 
 @author Kristoffer Braekken
 """
-from numpy import pi, log10, exp
+from numpy import pi, log10, exp, zeros
 
 """CONSTANTS"""
 
@@ -83,7 +83,7 @@ class Compound(object):
         self.name,self.m,self.r = name, mass, ratio
         self.relative_density = self.m / self.r
 
-    def r(self, rho, T, other_compound):
+    def rate(self, rho, T, other_compound):
         """
         @param rho The current mass density of the solar core.
         @param T The current temperature.
@@ -96,7 +96,7 @@ class Compound(object):
         else:
             kronecker_delta = 0
 
-        return ( self.r(rho) * other_compound.r(rho) ) \
+        return ( self.n(rho) * other_compound.n(rho) ) \
                         / ( rho * (1 + kronecker_delta) ) * \
                         lambda_function(self, other_compound, T)
 
@@ -120,11 +120,11 @@ def rhs_P(r, m):
     """
     return - ( G * m ) / ( 4. * pi * r**4 )
 
-def rhs_L(compounds):
+def rhs_L(rho, T, compounds):
     """
     @return dL / dm
     """
-    return epsilon(compounds)
+    return epsilon(rho, T, compounds)
 
 def rhs_T(T, rho, L, r):
     """
@@ -236,7 +236,7 @@ def kappa(T, rho, opacityFile=_OPACITY_FILE):
     # Returned from file is log10kappa
     return 10**log10kappa
 
-def epsilon(compounds):
+def epsilon(rho, T, compounds):
     """
     @param compunds List of compounds.
     @return Energy produced times reaction rate. Also, the dictionairy
@@ -246,19 +246,19 @@ def epsilon(compounds):
     energy_chains = {}
 
     # PP I, II, III
-    energy_chains['all'] = _Q_H_H * compounds['H'].r(compounds['H'])
+    energy_chains['all'] = _Q_H_H * compounds['H'].rate(rho,T,compounds['H'])
 
     # PP I
-    energy_chains['PPI'] = _Q_HE3_HE3 * compounds['He3'].r(compounds['He3'])
+    energy_chains['PPI'] = _Q_HE3_HE3 * compounds['He3'].rate(rho,T,compounds['He3'])
 
     # PP II
-    energy_chains['PPII'] = _Q_HE3_ALPHA * compounds['He3'].r(compounds['He4'])
-    energy_chains['PPII'] += _Q_BE7_E * compounds['Be7'].r(compounds['e-'])
-    energy_chains['PPII'] += _Q_LI7_H * compounds['Li7'].r(compounds['H'])
+    energy_chains['PPII'] = _Q_HE3_ALPHA * compounds['He3'].rate(rho,T,compounds['He4'])
+    energy_chains['PPII'] += _Q_BE7_E * compounds['Be7'].rate(rho,T,compounds['e-'])
+    energy_chains['PPII'] += _Q_LI7_H * compounds['Li7'].rate(rho,T,compounds['H'])
 
     # PP III
     energy_chains['PPIII'] = (_Q_BE7_H+_Q_BE8_Q_B8) \
-                    * compounds['Be7'].r(compounds['H'])
+                    * compounds['Be7'].rate(rho,T,compounds['H'])
 
     eps = np.sum([energy_chains[key] for key in ['PPI','PPII','PPIII']])
     return eps, energy_chains
@@ -274,10 +274,10 @@ def create_compounds():
     compounds['He4'] = Compound( 'He4', _HE3_MASS, _Y0 - _Y3_0 )
     compounds['Li7'] = Compound( 'Li7', _HE3_MASS, _Z0_7BE )
     compounds['Be7'] = Compound( 'Be7', _HE3_MASS, _Z0_7LI )
-    compounds['e-'] = Compound( 'e-', _E_MASS, 0)
+    compounds['e-'] = Compound( 'e-', _E_MASS, 1)
 
     # Special case, e relative density
-    compounds['e-'].relative_density = np.sum(
+    compounds['e-'].relative_density = sum(
             [c.relative_density for c in \
             [compounds[s] for s in \
             ['He3', 'He4', 'H'] ] ] )
@@ -326,7 +326,7 @@ def lambda_function(i, j, T):
         l = 3.11e5 * T9**(-2./3) * exp(-10.262 * T9**(-1./3)) \
                 + 2.53e3 * T9**(-3./2) * exp(-7.306 * T9**(-1.))
 
-    return N_A * l
+    return _N_A * l
 
 """MAIN INTEGRATION PROCESS"""
 
@@ -342,7 +342,8 @@ def integrate_FE(dm, tol=1e-10):
 
     m = _M0
     rho = _RHO0
-    N = m / float(dm)
+    N = int(abs(m / float(dm)))
+    print N
 
     # Variable parameters
     r = zeros(N)
@@ -358,10 +359,12 @@ def integrate_FE(dm, tol=1e-10):
     T[0] = _T0
 
     for i in range(1,N):
-        L[i] = L[i-1] + dm*rhs_L(compounds)
+        L[i] = L[i-1] + dm*rhs_L(rho, T[i-1], compounds)
         r[i] = r[i-1] + dm*rhs_r(r[i-1], rho)
         P[i] = P[i-1] + dm*rhs_P(r[i-1], m)
         T[i] = T[i-1] + dm*rhs_T(T[i-1], rho, L[i-1], r[i-1])
+
+        m -= dm
 
         if (abs(m) < tol) or (abs(r[i]) < tol) or (abs(L[i]) < tol):
             print 'Integration complete before loop finished. Returning.'
@@ -370,4 +373,7 @@ def integrate_FE(dm, tol=1e-10):
     return r, P, L, T
 
 if __name__ == '__main__':
-    pass
+    import sys
+    dm = float(sys.argv[1])
+
+    integrate_FE(dm)
