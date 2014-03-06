@@ -24,7 +24,7 @@ _R_SUN = 6.96e8 # [m]
 _M_SUN = 1.989e30 # [kg]
 
 _G = 6.67384e-11 # [m^3 kg^-1 s^-2]
-_C = 3.e8
+_C = 3.e8 # [m s^-1]
 _SIGMA = 5.67e-8 # [W m^-2 K^-4]
 _K_B = 1.382e-23 # [m^2 kg s^-2 K^-1]
 _N_A = 6.0221413e23 # Avogadro's constant
@@ -276,7 +276,7 @@ def ideal(P, T):
     """
     P_rad = (4. * _SIGMA / 3. ) * (T**4) / _C
     P_g = P - P_rad
-    E = _MU0*(_X0 + (1 + 2)_Y0/4.)
+    E = _MU0*(_X0 + (1 + 2)*_Y0/4.)
     mu = _MU0 / (1 + E)
     return P_g * mu / (_K_B * T)
 
@@ -370,7 +370,6 @@ def integrate_FE(dm, tol=1e-10):
     N = int(abs(_M0 / float(dm)))
     m = np.arange(N)*abs(dm)
     m = m[::-1] # Reverse, start at outside
-    print m
 
     # Variable parameters
     r = zeros(N)
