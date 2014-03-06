@@ -35,16 +35,16 @@ def dataTable(r_arr, m_arr, P_arr, L_arr, T_arr, rho_arr, initial_params, output
         return
 
     ofile = open(outputFile, 'w')
-    ofile.write('______________________________________________\n')
-    ofile.write('m / M0 | r / R0 | P [Pa] | T [K] | rho [kg m^-3] | L / L0\n')
-    ofile.write('______________________________________________\n')
+    ofile.write('_________________________________________________________\n')
+    ofile.write('   m / M0    |    r / R0    |    P [Pa]    |    T [K]    |    rho [kg m^-3]    |    L / L0\n')
+    ofile.write('_________________________________________________________\n')
 
     r_arr /= initial_params['R0']
     m_arr /= initial_params['M0']
     L_arr /= initial_params['L0']
 
     for r,m,P,L,T,rho in zip(r_arr,m_arr,P_arr,L_arr,T_arr,rho_arr):
-        ofile.write('%7f.4 %7f.4 %7g %7g %7g 7f.4\n' % (m,r,P,T,rho,L))
+        ofile.write('%12.4f %12.4f %12.3e %12.3e %12.3e %12.4f\n' % (m,r,P,T,rho,L))
 
     ofile.close()
 
