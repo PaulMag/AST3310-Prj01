@@ -17,13 +17,7 @@ _DATAPATH = '../data/'
 
 def dataTable(r_arr, m_arr, P_arr, L_arr, T_arr, rho_arr, initial_params, outputFile):
     """
-    Writes a neat table to the given file. Table has following shape:
-    _______________________________________________________
-    m / M | r / R | P [Pa] | T [K] | rho [kg / m^3] | L / L
-    _______________________________________________________
-    0         0        0       0      0                0
-    0         0        0       0      0                0
-    0         0        0       0      0                0
+    Writes a neat table to the given file.
 
     @param m,r,P,T,rho,L Arrays of all the values.
     @param initial_params Dictionairy containing initial values. Necessary keys
@@ -35,9 +29,6 @@ def dataTable(r_arr, m_arr, P_arr, L_arr, T_arr, rho_arr, initial_params, output
         return
 
     ofile = open(outputFile, 'w')
-    ofile.write('_________________________________________________________\n')
-    ofile.write('   m / M0    |    r / R0    |    P [Pa]    |    T [K]    |    rho [kg m^-3]    |    L / L0\n')
-    ofile.write('_________________________________________________________\n')
 
     r_arr /= initial_params['R0']
     m_arr /= initial_params['M0']
