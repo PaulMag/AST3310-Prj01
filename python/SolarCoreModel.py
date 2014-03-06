@@ -32,9 +32,9 @@ _N_A = 6.0221413e23 # Avogadro's constant
 _H_MASS = 1.6738e-27 # [kg]
 _HE3_MASS = 5.0081e-27 # [kg]
 _HE4_MASS = 6.6464e-27 # [kg]
-_LI7_MASS = 7.01600455 # [kg]
-_BE7_MASS = 7.01692983 # [kg]
-_E_MASS = 9.10938291 # [kg]
+_LI7_MASS = 1.16503486e-26 # [kg]
+_BE7_MASS = 1.16518851e-26 # [kg]
+_E_MASS = 9.10938291e-31 # [kg]
 
 """NUCLEAR ENERGY VALUES"""
 
