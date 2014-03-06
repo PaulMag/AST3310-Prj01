@@ -353,7 +353,7 @@ def lambda_function(i, j, T):
         l = 3.11e5 * T9**(-2./3) * exp(-10.262 * T9**(-1./3)) \
                 + 2.53e3 * T9**(-3./2) * exp(-7.306 * T9**(-1.))
 
-    return _N_A * l
+    return l
 
 """MAIN INTEGRATION PROCESS"""
 
