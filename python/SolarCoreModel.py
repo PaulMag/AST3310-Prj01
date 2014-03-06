@@ -238,20 +238,6 @@ def kappa(T, rho, opacityFile=_OPACITY_FILE):
     # Returned from file is log10kappa
     return 10**log10kappa
 
-def opacity_test(tol=1.e-10):
-    """
-    Function for testing that the opacity is fetched correctly.
-    """
-    # Test values
-    T = 10**(5.) # Feth 5.00 row
-    rho = 1.e-6 # Fetch -5.0 column
-
-    ans = log10(kappa(T, rho))
-    if abs(ans - (-0.068)) < tol:
-        print 'Sucess.'
-    else:
-        print 'Fail.\n10**kappa =', ans, 'and not -0.068.'
-
 def epsilon(compounds):
     """
     @param compunds List of compounds.
