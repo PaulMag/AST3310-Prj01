@@ -28,7 +28,6 @@ _C = 3.e8 # [m s^-1]
 _SIGMA = 5.67e-8 # [W m^-2 K^-4]
 _K_B = 1.382e-23 # [m^2 kg s^-2 K^-1]
 _N_A = 6.0221413e23 # Avogadro's constant
-_MU0 = 1. / (X + Y / 4. + Z / 2.)
 
 _H_MASS = 1.6738e-27 # [kg]
 _HE3_MASS = 5.0081e-27 # [kg]
@@ -69,6 +68,8 @@ _Y0 = 0.29
 _Z0 = 0.01
 _Z0_7LI = 1.e-5
 _Z0_7BE = 1.e-5
+
+_MU0 = 1. / (_X0 + _Y0 / 4. + _Z0 / 2.)
 
 """CLASSES"""
 
@@ -384,6 +385,15 @@ def integrate_FE(dm, tol=1e-10):
     T = zeros(N)
     T[0] = _T0
 
+    # HACK: For transmitting values to datawriter
+    initials = {}
+    initials['M0'] = _M0
+    initials['R0'] = _R0
+    initials['P0'] = _P0
+    initials['T0'] = _T0
+    initials['RHO0'] = _RHO0
+    initials['L0'] = _L0
+
     for i in range(1,N):
         rho = ideal(P[i-1], T[i-1])
 
@@ -396,7 +406,7 @@ def integrate_FE(dm, tol=1e-10):
             print 'Integration complete before loop finished. Returning.'
             return r[:i+1], m[:i+1], P[:i+1], L[:i+1], T[:i+1]
 
-    return r, m, P, L, T
+    return r, m, P, L, T, initials
 
 if __name__ == '__main__':
     import sys
@@ -405,7 +415,7 @@ if __name__ == '__main__':
         print 'Too tiny dm, try higher than -1e23.'
         sys.exit(1)
 
-    r, m, P, L, T = integrate_FE(dm)
+    r, m, P, L, T, initials = integrate_FE(dm)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
