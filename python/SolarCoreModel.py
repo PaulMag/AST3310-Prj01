@@ -69,7 +69,11 @@ _Z0 = 0.01
 _Z0_7LI = 1.e-5
 _Z0_7BE = 1.e-5
 
-_MU0 = 1. / (_X0 + _Y0 / 4. + _Z0 / 2.)
+"""IONIZATION"""
+
+_MU0 = 1. / ( _X0 + _Y0 / 4. + _Z0 / 2. )
+_E = _MU0 * ( _X0 + (1 + 2) * _Y0 / 4. )
+_MU = _MU0 / (1 + _E)
 
 """CLASSES"""
 
@@ -283,9 +287,7 @@ def ideal(P, T):
     """
     P_rad = (4. * _SIGMA / 3. ) * (T**4) / _C
     P_g = P - P_rad
-    E = _MU0*(_X0 + (1 + 2)*_Y0/4.)
-    mu = _MU0 / (1 + E)
-    return P_g * mu / (_K_B * T)
+    return P_g * _MU / (_K_B * T)
 
 def create_compounds():
     """
