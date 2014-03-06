@@ -354,8 +354,8 @@ def integrate_FE(dm, tol=1e-10):
     compounds = create_compounds()
 
     rho = _RHO0
-    N = int(abs(m / float(dm)))
-    m = range(N)*dm
+    N = int(abs(_M0 / float(dm)))
+    m = np.arange(N)*dm
 
     # Variable parameters
     r = zeros(N)
@@ -378,7 +378,7 @@ def integrate_FE(dm, tol=1e-10):
 
         if (abs(m[i-1]) < tol) or (abs(r[i]) < tol) or (abs(L[i]) < tol):
             print 'Integration complete before loop finished. Returning.'
-            return r[:i+1], P[:i+1], L[:i+1], T[:i+1]
+            return r[:i+1], m[:i+1], P[:i+1], L[:i+1], T[:i+1]
 
     return r, m, P, L, T
 
@@ -389,7 +389,7 @@ if __name__ == '__main__':
         print 'Too tiny dm, try higher than -1e23.'
         sys.exit(1)
 
-    r, m, P,L, T = integrate_FE(dm)
+    r, m, P, L, T = integrate_FE(dm)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
