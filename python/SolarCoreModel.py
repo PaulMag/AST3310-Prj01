@@ -120,17 +120,17 @@ def rhs_P(r, m):
     """
     return - ( G * m ) / ( 4. * pi * r**4 )
 
-def rhs_L():
+def rhs_L(compounds):
     """
     @return dL / dm
     """
-    return epsilon()
+    return epsilon(compounds)
 
-def rhs_T():
+def rhs_T(T, rho, L, r):
     """
     @return dT / dm
     """
-    return ( 3. * kappa() * L() ) / ( 256. * pi*pi * SIGMA * r**4 * T**3 )
+    return ( 3. * kappa(T, rho) * L ) / ( 256. * pi*pi * SIGMA * r**4 * T**3 )
 
 """OTHER FUNCTIONS"""
 
@@ -330,12 +330,44 @@ def lambda_function(i, j, T):
 
 """MAIN INTEGRATION PROCESS"""
 
-def integrate(dm):
+def integrate_FE(dm, tol=1e-10):
     """
-    Performs integration.
+    Performs integration using the ForwardEuler scheme.
     """
-    #TODO Write function (skeleton)
-    pass
+    if dm > 0:
+        print 'dm must be negative, returning.'
+        return
+
+    compounds = create_compounds()
+
+    m = _M0
+    rho = _RHO0
+    N = m / float(dm)
+
+    # Variable parameters
+    r = zeros(N)
+    r[0] = _R0
+
+    P = zeros(N)
+    P[0] = _P0
+
+    L = zeros(N)
+    L[0] = _L0
+
+    T = zeros(N)
+    T[0] = _T0
+
+    for i in range(1,N):
+        L[i] = L[i-1] + dm*rhs_L(compounds)
+        r[i] = r[i-1] + dm*rhs_r(r[i-1], rho)
+        P[i] = P[i-1] + dm*rhs_P(r[i-1], m)
+        T[i] = T[i-1] + dm*rhs_T(T[i-1], rho, L[i-1], r[i-1])
+
+        if (abs(m) < tol) or (abs(r[i]) < tol) or (abs(L[i]) < tol):
+            print 'Integration complete before loop finished. Returning.'
+            return r[:i+1], P[:i+1], L[:i+1], T[:i+1]
+
+    return r, P, L, T
 
 if __name__ == '__main__':
     pass
