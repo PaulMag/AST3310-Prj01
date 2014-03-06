@@ -7,6 +7,8 @@ differential equations.
 
 @author Kristoffer Braekken
 """
+import numpy as np
+
 from numpy import pi, log10, exp, zeros
 
 """CONSTANTS"""
@@ -19,6 +21,7 @@ _L_SUN = 3.846e26 # [W]
 _R_SUN = 6.96e8 # [m]
 _M_SUN = 1.989e30 # [kg]
 
+_G = 6.67384e-11 # [m^3 kg^-1 s^-2]
 _SIGMA = 5.67e-8 # [W m^-2 K^-4]
 _K_B = 1.382e-23 # [m^2 kg s^-2 K^-1]
 _N_A = 6.0221413e23 # Avogadro's constant
@@ -118,7 +121,7 @@ def rhs_P(r, m):
     """
     @return dP / dm
     """
-    return - ( G * m ) / ( 4. * pi * r**4 )
+    return - ( _G * m ) / ( 4. * pi * r**4 )
 
 def rhs_L(rho, T, compounds):
     """
@@ -130,7 +133,7 @@ def rhs_T(T, rho, L, r):
     """
     @return dT / dm
     """
-    return ( 3. * kappa(T, rho) * L ) / ( 256. * pi*pi * SIGMA * r**4 * T**3 )
+    return ( 3. * kappa(T, rho) * L ) / ( 256. * pi*pi * _SIGMA * r**4 * T**3 )
 
 """OTHER FUNCTIONS"""
 
@@ -257,10 +260,10 @@ def epsilon(rho, T, compounds):
     energy_chains['PPII'] += _Q_LI7_H * compounds['Li7'].rate(rho,T,compounds['H'])
 
     # PP III
-    energy_chains['PPIII'] = (_Q_BE7_H+_Q_BE8_Q_B8) \
+    energy_chains['PPIII'] = (_Q_BE7_H+_Q_BE8 + _Q_B8) \
                     * compounds['Be7'].rate(rho,T,compounds['H'])
 
-    eps = np.sum([energy_chains[key] for key in ['PPI','PPII','PPIII']])
+    eps = sum([energy_chains[key] for key in ['PPI','PPII','PPIII']])
     return eps, energy_chains
 
 def create_compounds():
@@ -368,7 +371,7 @@ def integrate_FE(dm, tol=1e-10):
     T[0] = _T0
 
     for i in range(1,N):
-        L[i] = L[i-1] + dm*rhs_L(rho, T[i-1], compounds)
+        L[i] = L[i-1] + dm*rhs_L(rho, T[i-1], compounds)[0]
         r[i] = r[i-1] + dm*rhs_r(r[i-1], rho)
         P[i] = P[i-1] + dm*rhs_P(r[i-1], m)
         T[i] = T[i-1] + dm*rhs_T(T[i-1], rho, L[i-1], r[i-1])
