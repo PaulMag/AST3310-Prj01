@@ -367,7 +367,6 @@ def integrate_FE(dm, tol=1e-10):
 
     compounds = create_compounds()
 
-    rho = _RHO0
     N = int(abs(_M0 / float(dm)))
     m = np.arange(N)*abs(dm)
     m = m[::-1] # Reverse, start at outside
@@ -385,6 +384,9 @@ def integrate_FE(dm, tol=1e-10):
     T = zeros(N)
     T[0] = _T0
 
+    rho = zeros(N)
+    rho[0] = _RHO0
+
     # HACK: For transmitting values to datawriter
     initials = {}
     initials['M0'] = _M0
@@ -395,16 +397,16 @@ def integrate_FE(dm, tol=1e-10):
     initials['L0'] = _L0
 
     for i in range(1,N):
-        rho = ideal(P[i-1], T[i-1])
+        rho[i] = ideal(P[i-1], T[i-1])
 
-        L[i] = L[i-1] + dm*rhs_L(rho, T[i-1], compounds)[0]
-        r[i] = r[i-1] + dm*rhs_r(r[i-1], rho)
+        L[i] = L[i-1] + dm*rhs_L(rho[i], T[i-1], compounds)[0]
+        r[i] = r[i-1] + dm*rhs_r(r[i-1], rho[i])
         P[i] = P[i-1] + dm*rhs_P(r[i-1], m[i-1])
-        T[i] = T[i-1] + dm*rhs_T(T[i-1], rho, L[i-1], r[i-1])
+        T[i] = T[i-1] + dm*rhs_T(T[i-1], rho[i], L[i-1], r[i-1])
 
         if (abs(m[i-1]) < tol) or (abs(r[i]) < tol) or (abs(L[i]) < tol):
             print 'Integration complete before loop finished. Returning.'
-            return r[:i+1], m[:i+1], P[:i+1], L[:i+1], T[:i+1]
+            return r[:i+1], m[:i+1], P[:i+1], L[:i+1], T[:i+1], rho[:i+1], initials
 
     return r, m, P, L, T, rho, initials
 
