@@ -154,13 +154,13 @@ def kappa(T, rho, opacityFile=_OPACITY_FILE):
     @param rho Density in SI units [kg m^-3]
     @param T Temperature in SI units [K]
 
-    @return kappa in unit [m^2 kg^-1]
+    @return kappa in SI units [m^2 kg^-1]
     """
     # log10(T)
     log10T = log10(T)
 
     # log10(R)
-    rho = rho * 1e3 * 1e2**(-3.) # Convert to [g cm^-3]
+    rho *= 1.e3; rho /= 1.e2**3 # Convert to [g cm^-3]
     R = float(rho) / ( T / 1.e6 )
     log10R = log10(R)
 
