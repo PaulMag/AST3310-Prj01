@@ -298,13 +298,13 @@ def create_compounds():
     compounds['He4'] = Compound( 'He4', _HE3_MASS, _Y0 - _Y3_0 )
     compounds['Li7'] = Compound( 'Li7', _HE3_MASS, _Z0_7BE )
     compounds['Be7'] = Compound( 'Be7', _HE3_MASS, _Z0_7LI )
-    compounds['e-'] = Compound( 'e-', _E_MASS, _E_MASS)
 
+    compounds['e-'] = Compound( 'e-', _E_MASS, 1)
     # Special case, e relative density
-    compounds['e-'].relative_density = sum(
-            [c.relative_density for c in \
-            [compounds[s] for s in \
-            ['He3', 'He4', 'H'] ] ] )
+    compounds['e-'].relative_density = \
+            compounds['He3'].relative_density + \
+            compounds['He4'].relative_density + \
+            compounds['H'].relative_density
 
     return compounds
 
