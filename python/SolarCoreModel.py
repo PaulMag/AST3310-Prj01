@@ -402,18 +402,16 @@ def integrate_FE(dm, tol=1e-10):
     initials['RHO0'] = _RHO0
     initials['L0'] = _L0
 
-    print rho[0]
     for i in range(1,N):
         # Print progress
-        # percent = (i / float(N-1)) * 100
-        # sys.stdout.write('Progress: %4.2f %s\r' % (percent, '%'))
-        # sys.stdout.flush()
+        percent = (i / float(N-1)) * 100
+        sys.stdout.write('Progress: %4.2f %s\r' % (percent, '%'))
+        sys.stdout.flush()
 
         rho[i] = ideal(P[i-1], T[i-1])
 
         L_new = rhs_L(rho[i], T[i-1], compounds)
         L[i] = L[i-1] + dm*L_new[0]
-        print L_new[1]
 
         r[i] = r[i-1] + dm*rhs_r(r[i-1], rho[i])
         P[i] = P[i-1] + dm*rhs_P(r[i-1], m[i-1])
