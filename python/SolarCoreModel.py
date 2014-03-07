@@ -265,8 +265,10 @@ def epsilon(rho, T, compounds):
     # PP I
     energy_chains['PPI'] = _Q_HE3_HE3 * compounds['He3'].rate(rho,T,compounds['He3'])
 
-    # PP II
+    # PP II, III
     energy_chains['PPII'] = _Q_HE3_ALPHA * compounds['He3'].rate(rho,T,compounds['He4'])
+    
+    # PP II
     energy_chains['PPII'] += _Q_BE7_E * compounds['Be7'].rate(rho,T,compounds['e-'])
     energy_chains['PPII'] += _Q_LI7_H * compounds['Li7'].rate(rho,T,compounds['H'])
 
