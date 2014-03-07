@@ -9,7 +9,6 @@ differential equations.
 """
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
 
 from numpy import pi, log10, exp, zeros
 
@@ -431,12 +430,3 @@ if __name__ == '__main__':
         sys.exit(1)
 
     r, m, P, L, T, initials = integrate_FE(dm)
-
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    ax.plot(m, L)
-    ax.set_xlabel('$m$')
-    ax.set_ylabel('$L$')
-    ax.grid('on')
-
-    plt.show()
