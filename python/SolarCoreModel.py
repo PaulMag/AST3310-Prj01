@@ -27,6 +27,7 @@ _C = 3.e10 # [cm s^-1]
 _SIGMA = 5.6704e-5 # Stefan-boltzmann [erg cm^-2 s^-1 K^-4]
 _K_B = 1.3806488e-16 # [erg K^-1]
 _N_A = 6.0221413e23 # Avogadro's constant [mol^-1]
+_M_U = 1.66e-24 # [g]
 
 _H_MASS = 1.6738e-24 # [g]
 _HE3_MASS = 5.0081e-24 # [g]
@@ -281,9 +282,11 @@ def ideal(P, T):
     """
     Ideal equation of state.
     """
-    P_rad = (4. * _SIGMA / 3. ) * (T**4) / _C
+    a = 4. * _SIGMA / _C
+    P_rad = ( a / 3. ) * T**4
     P_g = P - P_rad
-    return P_g * _MU / (_K_B * T)
+    rho = P_g * _MU * _M_U / (_K_B * T)
+    return rho
 
 def create_compounds():
     """
@@ -400,15 +403,20 @@ def integrate_FE(dm, tol=1e-10):
     initials['RHO0'] = _RHO0
     initials['L0'] = _L0
 
+    print rho[0]
     for i in range(1,N):
         # Print progress
-        percent = (i / float(N-1)) * 100
-        sys.stdout.write('Progress: %4.2f %s\r' % (percent, '%'))
-        sys.stdout.flush()
+        # percent = (i / float(N-1)) * 100
+        # sys.stdout.write('Progress: %4.2f %s\r' % (percent, '%'))
+        # sys.stdout.flush()
 
         rho[i] = ideal(P[i-1], T[i-1])
+        print rho[i]
 
-        L[i] = L[i-1] + dm*rhs_L(rho[i], T[i-1], compounds)[0]
+        L_new = rhs_L(rho[i], T[i-1], compounds)
+        L[i] = L[i-1] + dm*L_new[0]
+        # print L_new[1]
+
         r[i] = r[i-1] + dm*rhs_r(r[i-1], rho[i])
         P[i] = P[i-1] + dm*rhs_P(r[i-1], m[i-1])
         T[i] = T[i-1] + dm*rhs_T(T[i-1], rho[i], L[i-1], r[i-1])
