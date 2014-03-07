@@ -24,9 +24,9 @@ _M_SUN = 1.989e33 # [g]
 
 _G = 6.67384e-8 # [cm^3 g^-1 s^-2]
 _C = 3.e10 # [cm s^-1]
-_SIGMA = 5.67e-8 # [W m^-2 K^-4] TODO
+_SIGMA = 5.6704e-5 # Stefan-boltzmann [erg cm^-2 s^-1 K^-4]
 _K_B = 1.3806488e-16 # [erg K^-1]
-_N_A = 6.0221413e23 # Avogadro's constant [mol^-1] TODO check if need cgs conv
+_N_A = 6.0221413e23 # Avogadro's constant [mol^-1]
 
 _H_MASS = 1.6738e-24 # [g]
 _HE3_MASS = 5.0081e-24 # [g]
