@@ -150,16 +150,15 @@ def kappa(T, rho, opacityFile=_OPACITY_FILE):
     Function reads from opacity file (defined as constant by default). And uses
     temperature T and density rho to find the kappa which is closest.
 
-    @param rho Density in SI units [kg m^-3]
+    @param rho Density in CGS units [g cm^-3]
     @param T Temperature in SI units [K]
 
-    @return kappa in SI units [m^2 kg^-1]
+    @return kappa in CGS units [cm^2 g^-1]
     """
     # log10(T)
     log10T = log10(T)
 
     # log10(R)
-    rho *= 1.e3; rho /= 1.e2**3 # Convert to [g cm^-3]
     R = float(rho) / ( T / 1.e6 )
     log10R = log10(R)
 
@@ -249,9 +248,7 @@ def kappa(T, rho, opacityFile=_OPACITY_FILE):
     opacities.close()
 
     # Returned from file is log10kappa
-    kappa = 10**log10kappa # [ cm^2 g^-1 ]
-    kappa *= 1.e4; kappa /= 1.e3 # [ m^2 kg^-1 ]
-    return kappa
+    return 10**log10kappa # [ cm^2 g^-1 ]
 
 def epsilon(rho, T, compounds):
     """
