@@ -93,7 +93,7 @@ class Compound(object):
         @param ratio How much of the total mass is this compound.
         """
         self.name,self.m,self.r = name, mass, ratio
-        self.relative_density = self.m / self.r
+        self.relative_density = self.r / self.m
 
     def rate(self, rho, T, other_compound):
         """
@@ -102,14 +102,13 @@ class Compound(object):
         @param other_compound The other compound to react with.
         @return Rate per unit mass.
         """
-        #TODO is it correct that equal compounds is 1?
         if self.name == other_compound.name:
             kronecker_delta = 1
         else:
             kronecker_delta = 0
 
-        return ( self.n(rho) * other_compound.n(rho) ) \
-                        / ( rho * (1 + kronecker_delta) ) * \
+        return ( ( self.n(rho) * other_compound.n(rho) ) \
+                        / ( rho * (1 + kronecker_delta) ) ) * \
                         lambda_function(self, other_compound, T)
 
     def n(self, rho):
@@ -275,7 +274,7 @@ def epsilon(rho, T, compounds):
     energy_chains['PPIII'] = (_Q_BE7_H+_Q_BE8 + _Q_B8) \
                     * compounds['Be7'].rate(rho,T,compounds['H'])
 
-    eps = sum([energy_chains[key] for key in ['PPI','PPII','PPIII']])
+    eps = sum([energy_chains[key] for key in ['all', 'PPI','PPII','PPIII']])
     return eps, energy_chains
 
 def ideal(P, T):
@@ -411,11 +410,10 @@ def integrate_FE(dm, tol=1e-10):
         # sys.stdout.flush()
 
         rho[i] = ideal(P[i-1], T[i-1])
-        print rho[i]
 
         L_new = rhs_L(rho[i], T[i-1], compounds)
         L[i] = L[i-1] + dm*L_new[0]
-        # print L_new[1]
+        print L_new[1]
 
         r[i] = r[i-1] + dm*rhs_r(r[i-1], rho[i])
         P[i] = P[i-1] + dm*rhs_P(r[i-1], m[i-1])
