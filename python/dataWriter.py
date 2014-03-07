@@ -8,6 +8,7 @@ Contains methods for writing datafiles from simulation data from the
 @author Kristoffer Braekken
 """
 import sys,os,SolarCoreModel
+from time import gmtime, strftime
 
 """CONSTANTS"""
 
@@ -46,4 +47,5 @@ if __name__ == '__main__':
     dm = float(sys.argv[1])
 
     r,m,P,L,T,rho,init = SolarCoreModel.integrate_FE(dm)
-    dataTable( r,m,P,L,T,rho,init, os.path.join(_DATAPATH,'table.dat') )
+    dataTable( r,m,P,L,T,rho,init,
+            os.path.join( _DATAPATH, strftime('table_%d-%m-%Y_at_%H:%M:%S.dat',gmtime() ) ) )
